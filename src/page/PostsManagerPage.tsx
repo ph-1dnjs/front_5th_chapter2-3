@@ -33,6 +33,7 @@ import type { PostDetail } from "../shared/type/post"
 import UserModal from "../widget/ui/UserModal"
 import EditCommentModal from "../widget/ui/EditCommentModal"
 import PostDetailModal from "../widget/ui/PostDetailModal"
+import AddCommentModal from "../widget/ui/AddCommentModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -583,22 +584,13 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 댓글 추가 대화상자 */}
-      <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={newComment.body}
-              onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <AddCommentModal
+        showAddCommentDialog={showAddCommentDialog}
+        setShowAddCommentDialog={setShowAddCommentDialog}
+        newComment={newComment}
+        setNewComment={setNewComment}
+        addComment={addComment}
+      />
 
       <EditCommentModal
         showEditCommentDialog={showEditCommentDialog}
