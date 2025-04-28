@@ -25,7 +25,7 @@ import {
   TableRow,
   Textarea,
 } from "../shared/ui"
-import UserModal from "../widgets/ui/UserModal"
+import UserModal from "../widget/ui/UserModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
