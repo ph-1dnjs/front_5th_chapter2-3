@@ -4,14 +4,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { highlightText } from "../../shared/util"
 import CommentSection from "./CommentSection"
 
-import type { PostDetail } from "../../shared/type/post"
+import type { Post } from "../../shared/type/post"
 import type { Comment, NewComment } from "../../shared/type/comment"
 
 interface PostDetailProps {
   isShow: boolean
   setIsShow: Dispatch<SetStateAction<boolean>>
   postId: number
-  selectedPost: PostDetail | null
+  selectedPost: Post | null
   comments: Record<number, Comment[]>
   setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
   setShowAddCommentDialog: (show: boolean) => void
@@ -22,7 +22,7 @@ interface PostDetailProps {
   searchQuery: string
 }
 
-const PostDetail: React.FC<PostDetailProps> = ({
+const PostDetailModal: React.FC<PostDetailProps> = ({
   isShow,
   setIsShow,
   postId,
@@ -63,4 +63,4 @@ const PostDetail: React.FC<PostDetailProps> = ({
   )
 }
 
-export default PostDetail
+export default PostDetailModal

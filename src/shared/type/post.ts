@@ -1,4 +1,4 @@
-export interface PostDetail {
+export interface Post {
   id: number
   title: string
   body: string
@@ -16,4 +16,10 @@ interface Author {
   id: number
   username: string
   image: string
+}
+
+export interface NewPost {
+  title: string
+  body: string
+  userId: number
 }

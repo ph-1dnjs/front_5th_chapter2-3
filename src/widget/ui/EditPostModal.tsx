@@ -4,13 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { Input, Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
-import type { PostDetail } from "../../shared/type/post"
+import type { Post } from "../../shared/type/post"
 
 interface EditPostModalProps {
   showEditDialog: boolean
   setShowEditDialog: (show: boolean) => void
-  selectedPost: PostDetail | null
-  setSelectedPost: React.Dispatch<React.SetStateAction<PostDetail | null>>
+  selectedPost: Post | null
+  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
   updatePost: () => void
 }
 
