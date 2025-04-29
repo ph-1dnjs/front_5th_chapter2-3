@@ -1,15 +1,9 @@
-import React from "react"
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../shared/ui"
+import { usePostStore } from "../../entities/post/model/store"
 
-interface PaginationProps {
-  skip: number
-  setSkip: (value: number) => void
-  limit: number
-  setLimit: (value: number) => void
-  total: number
-}
+const Pagination = () => {
+  const { skip, setSkip, limit, setLimit, total } = usePostStore()
 
-const Pagination: React.FC<PaginationProps> = ({ skip, setSkip, limit, setLimit, total }) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">

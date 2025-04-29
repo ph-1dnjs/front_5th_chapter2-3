@@ -15,9 +15,11 @@ import EditPostModal from "../widget/ui/EditPostModal"
 import AddPostModal from "../widget/ui/AddPostModal"
 import Pagination from "../widget/ui/Pagination"
 import PostTable from "../widget/ui/PostTable"
-import PostFilterControls from "../entities/post/ui/PostFilterControls"
 
-import { useSearchPostQuery } from "../entities/post/model/usePostQuery"
+import PostFilterControls from "../entities/post/ui/PostFilterControls"
+import { usePostStore } from "../entities/post/model/store"
+
+import { fetchPosts } from "../entities/post/actions/fetchPost"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -25,18 +27,27 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
-  const [total, setTotal] = useState(0)
-  const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
-  const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState<string>(queryParams.get("search") || "")
+  const {
+    loading,
+    setLoading,
+    posts,
+    setPosts,
+    total,
+    setTotal,
+    skip,
+    setSkip,
+    limit,
+    setLimit,
+    searchQuery,
+    setSearchQuery,
+  } = usePostStore()
+
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
-  const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
@@ -60,36 +71,6 @@ const PostsManager = () => {
     navigate(`?${params.toString()}`)
   }
 
-  // 게시물 가져오기
-  const fetchPosts = () => {
-    setLoading(true)
-    let postsData
-    let usersData
-
-    fetch(`/api/posts?limit=${limit}&skip=${skip}`)
-      .then((response) => response.json())
-      .then((data) => {
-        postsData = data
-        return fetch("/api/users?limit=0&select=username,image")
-      })
-      .then((response) => response.json())
-      .then((users) => {
-        usersData = users.users
-        const postsWithUsers = postsData.posts.map((post) => ({
-          ...post,
-          author: usersData.find((user) => user.id === post.userId),
-        }))
-        setPosts(postsWithUsers)
-        setTotal(postsData.total)
-      })
-      .catch((error) => {
-        console.error("게시물 가져오기 오류:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
   // 태그 가져오기
   const fetchTags = async () => {
     try {
@@ -101,25 +82,10 @@ const PostsManager = () => {
     }
   }
 
-  // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-
-    const { data } = await useSearchPostQuery(searchQuery)
-
-    setPosts(data.posts)
-    setTotal(data.total)
-    setLoading(false)
-  }
-
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag) => {
     if (!tag || tag === "all") {
-      fetchPosts()
+      fetchPosts(limit, skip)
       return
     }
     setLoading(true)
@@ -302,7 +268,7 @@ const PostsManager = () => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
     } else {
-      fetchPosts()
+      fetchPosts(limit, skip)
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
@@ -331,9 +297,6 @@ const PostsManager = () => {
       <CardContent>
         <div className="flex flex-col gap-4">
           <PostFilterControls
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            searchPosts={searchPosts}
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
             tags={tags}
@@ -349,8 +312,6 @@ const PostsManager = () => {
             <div className="flex justify-center p-4">로딩 중...</div>
           ) : (
             <PostTable
-              posts={posts}
-              searchQuery={searchQuery}
               selectedTag={selectedTag}
               setSelectedTag={setSelectedTag}
               updateURL={updateURL}
@@ -362,7 +323,7 @@ const PostsManager = () => {
             />
           )}
 
-          <Pagination skip={skip} setSkip={setSkip} limit={limit} setLimit={setLimit} total={total} />
+          <Pagination />
         </div>
       </CardContent>
 

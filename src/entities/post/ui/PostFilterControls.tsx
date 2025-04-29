@@ -1,11 +1,10 @@
 import { Search } from "lucide-react"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../../shared/ui"
+import { usePostStore } from "../model/store"
+import { searchPosts } from "../actions/searchPosts"
 
 interface PostFilterControlsProps {
-  searchQuery: string
-  setSearchQuery: (query: string) => void
-  searchPosts: () => void
   selectedTag: string
   setSelectedTag: (tag: string) => void
   tags: { url: string; slug: string }[]
@@ -18,9 +17,6 @@ interface PostFilterControlsProps {
 }
 
 const PostFilterControls: React.FC<PostFilterControlsProps> = ({
-  searchQuery,
-  setSearchQuery,
-  searchPosts,
   selectedTag,
   setSelectedTag,
   tags,
@@ -31,6 +27,8 @@ const PostFilterControls: React.FC<PostFilterControlsProps> = ({
   sortOrder,
   setSortOrder,
 }) => {
+  const { searchQuery, setSearchQuery } = usePostStore()
+
   return (
     <div className="flex gap-4">
       <div className="flex-1">
