@@ -20,11 +20,11 @@ import PostFilterControls from "../entities/post/ui/PostFilterControls"
 import { usePostStore } from "../entities/post/model/store"
 
 import { fetchPosts } from "../entities/post/actions/fetchPost"
+import { User } from "../shared/type/user"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
   const {
@@ -32,7 +32,6 @@ const PostsManager = () => {
     setLoading,
     posts,
     setPosts,
-    total,
     setTotal,
     skip,
     setSkip,
@@ -43,13 +42,13 @@ const PostsManager = () => {
   } = usePostStore()
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
-  const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
+  const [sortBy, setSortBy] = useState("sortBy")
+  const [sortOrder, setSortOrder] = useState("asc")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
   const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
+  const [selectedTag, setSelectedTag] = useState("")
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
@@ -83,9 +82,11 @@ const PostsManager = () => {
   }
 
   // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
+  const fetchPostsByTag = async (tag: string) => {
+    if (tag === selectedTag) return // 이미 선택된 태그면 다시 요청하지 않음
+    setSelectedTag(tag) // 상태 업데이트
     if (!tag || tag === "all") {
-      fetchPosts(limit, skip)
+      fetchPosts(limit, skip) // 모든 게시물 불러오기
       return
     }
     setLoading(true)
@@ -144,7 +145,7 @@ const PostsManager = () => {
   }
 
   // 게시물 삭제
-  const deletePost = async (id) => {
+  const deletePost = async (id: number) => {
     try {
       await fetch(`/api/posts/${id}`, {
         method: "DELETE",
@@ -156,7 +157,7 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId) => {
+  const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
       const response = await fetch(`/api/comments/post/${postId}`)
@@ -207,7 +208,7 @@ const PostsManager = () => {
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
+  const deleteComment = async (id: number, postId: number) => {
     try {
       await fetch(`/api/comments/${id}`, {
         method: "DELETE",
@@ -222,12 +223,14 @@ const PostsManager = () => {
   }
 
   // 댓글 좋아요
-  const likeComment = async (id, postId) => {
+  const likeComment = async (id: number, postId: number) => {
     try {
       const response = await fetch(`/api/comments/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
+        body: JSON.stringify({
+          likes: comments[postId].find((c) => c.id === id).likes + 1,
+        }),
       })
       const data = await response.json()
       setComments((prev) => ({
@@ -242,14 +245,14 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
+  const openUserModal = async (user: User) => {
     try {
       const response = await fetch(`/api/users/${user.id}`)
       const userData = await response.json()
