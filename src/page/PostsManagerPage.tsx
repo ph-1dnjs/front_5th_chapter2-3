@@ -1,26 +1,8 @@
 import { useEffect, useState } from "react"
-import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../shared/ui"
+import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
 
 import type { Comment, NewComment } from "../shared/type/comment"
 import type { NewPost, Post } from "../shared/type/post"
@@ -31,9 +13,9 @@ import PostDetailModal from "../widget/ui/PostDetailModal"
 import AddCommentModal from "../widget/ui/AddCommentModal"
 import EditPostModal from "../widget/ui/EditPostModal"
 import AddPostModal from "../widget/ui/AddPostModal"
-import { highlightText } from "../shared/util"
 import Pagination from "../widget/ui/Pagination"
 import PostTable from "../widget/ui/PostTable"
+import PostFilterControls from "../widget/ui/PostFilterControls"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -349,61 +331,20 @@ const PostsManager = () => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          {/* 검색 및 필터 컨트롤 */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="게시물 검색..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && searchPosts()}
-                />
-              </div>
-            </div>
-            <Select
-              value={selectedTag}
-              onValueChange={(value) => {
-                setSelectedTag(value)
-                fetchPostsByTag(value)
-                updateURL()
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="태그 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">모든 태그</SelectItem>
-                {tags.map((tag) => (
-                  <SelectItem key={tag.url} value={tag.slug}>
-                    {tag.slug}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 기준" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">없음</SelectItem>
-                <SelectItem value="id">ID</SelectItem>
-                <SelectItem value="title">제목</SelectItem>
-                <SelectItem value="reactions">반응</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={setSortOrder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="정렬 순서" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">오름차순</SelectItem>
-                <SelectItem value="desc">내림차순</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <PostFilterControls
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchPosts={searchPosts}
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            tags={tags}
+            fetchPostsByTag={fetchPostsByTag}
+            updateURL={updateURL}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+          />
 
           {loading ? (
             <div className="flex justify-center p-4">로딩 중...</div>
