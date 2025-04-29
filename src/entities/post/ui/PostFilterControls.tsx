@@ -1,6 +1,6 @@
 import { Search } from "lucide-react"
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../shared/ui"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../../shared/ui"
 
 interface PostFilterControlsProps {
   searchQuery: string

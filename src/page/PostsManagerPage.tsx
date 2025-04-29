@@ -15,7 +15,9 @@ import EditPostModal from "../widget/ui/EditPostModal"
 import AddPostModal from "../widget/ui/AddPostModal"
 import Pagination from "../widget/ui/Pagination"
 import PostTable from "../widget/ui/PostTable"
-import PostFilterControls from "../widget/ui/PostFilterControls"
+import PostFilterControls from "../entities/post/ui/PostFilterControls"
+
+import { useSearchPostQuery } from "../entities/post/model/usePostQuery"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -27,7 +29,7 @@ const PostsManager = () => {
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get("skip") || "0"))
   const [limit, setLimit] = useState(parseInt(queryParams.get("limit") || "10"))
-  const [searchQuery, setSearchQuery] = useState(queryParams.get("search") || "")
+  const [searchQuery, setSearchQuery] = useState<string>(queryParams.get("search") || "")
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get("sortBy") || "")
   const [sortOrder, setSortOrder] = useState(queryParams.get("sortOrder") || "asc")
@@ -106,14 +108,11 @@ const PostsManager = () => {
       return
     }
     setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
+
+    const { data } = await useSearchPostQuery(searchQuery)
+
+    setPosts(data.posts)
+    setTotal(data.total)
     setLoading(false)
   }
 
