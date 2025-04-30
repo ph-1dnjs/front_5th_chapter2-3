@@ -21,6 +21,7 @@ import { usePostStore } from "../entities/post/model/store"
 
 import { fetchPosts } from "../entities/post/actions/fetchPosts"
 import { User } from "../shared/type/user"
+import { fetchPostsByTag } from "../entities/post/actions/fetchPostsByTag"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -29,10 +30,8 @@ const PostsManager = () => {
   // 상태 관리
   const {
     loading,
-    setLoading,
     posts,
     setPosts,
-    setTotal,
     skip,
     setSkip,
     limit,
