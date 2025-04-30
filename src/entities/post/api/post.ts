@@ -1,4 +1,4 @@
-import { NewPost, Post } from "../../../shared/type/post"
+import { NewPost, Post, Tag } from "../../../shared/type/post"
 import { PostResponse } from "../model/type"
 
 export const getPosts = async (limit: number, skip: number): Promise<PostResponse> => {
@@ -8,6 +8,16 @@ export const getPosts = async (limit: number, skip: number): Promise<PostRespons
   } catch (e) {
     console.error("게시물 가져오기 오류:", e)
     return { posts: [], total: 0 }
+  }
+}
+
+export const getTags = async (): Promise<Tag[]> => {
+  try {
+    const res = await fetch("/api/posts/tags")
+    return res.json()
+  } catch (e) {
+    console.error("태그 가져오기 오류:", e)
+    return []
   }
 }
 
@@ -43,5 +53,29 @@ export const addPostApi = async (post: NewPost): Promise<Post | null> => {
   } catch (e) {
     console.error("게시물 추가 오류:", e)
     return null
+  }
+}
+
+export const updatePostApi = async (selectedPost: Post): Promise<Post | null> => {
+  try {
+    const res = await fetch(`/api/posts/${selectedPost?.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(selectedPost),
+    })
+    return res.json()
+  } catch (e) {
+    console.error("게시물 업데이트 오류:", e)
+    return null
+  }
+}
+
+export const deletePostApi = async (id: number) => {
+  try {
+    await fetch(`/api/posts/${id}`, {
+      method: "DELETE",
+    })
+  } catch (e) {
+    console.error("게시물 삭제 오류:", e)
   }
 }

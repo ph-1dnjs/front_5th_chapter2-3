@@ -5,7 +5,7 @@ import { Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
 import { useCommentStore } from "../../entities/comment/model/store"
-import { addComment } from "../../entities/comment/actions/addComment"
+import { addComment } from "../../entities/comment/action/addComment"
 
 const AddCommentModal: React.FC = () => {
   const { newComment, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentStore()

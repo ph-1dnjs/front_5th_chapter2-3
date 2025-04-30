@@ -19,3 +19,9 @@ export interface NewPost {
   body: string
   userId: number
 }
+
+export interface Tag {
+  slug: string
+  name: string
+  url: string
+}

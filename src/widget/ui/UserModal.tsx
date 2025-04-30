@@ -1,16 +1,10 @@
-import { Dispatch, SetStateAction, useState } from "react"
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
-import { User } from "../../shared/type/user"
 
-interface IProps {
-  user: User | null
-  isShow: boolean
-  setIsShow: Dispatch<SetStateAction<boolean>>
-}
+import { useUserStore } from "../../entities/user/model/store"
 
-const UserModal: React.FC<IProps> = ({ user }) => {
-  const [showUserModal, setShowUserModal] = useState(false)
+const UserModal: React.FC = () => {
+  const { selectedUser, showUserModal, setShowUserModal } = useUserStore()
+  const user = selectedUser
 
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>

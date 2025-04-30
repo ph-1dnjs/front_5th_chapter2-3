@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import { NewPost, Post } from "../../../shared/type/post"
+import { Post, Tag } from "../../../shared/type/post"
 
 interface PostStore {
   loading: boolean
@@ -15,12 +15,16 @@ interface PostStore {
   setSkip: (limit: number) => void
   searchQuery: string
   setSearchQuery: (searchQuery: string) => void
+  tags: Tag[]
+  setTags: (tags: Tag[]) => void
   selectedTag: string
   setSelectedTag: (selectedTag: string) => void
+  selectedPost: Post | null
+  setSelectedPost: (selectedPost: Post) => void
   showAddDialog: boolean
   setShowAddDialog: (showAddDialog: boolean) => void
-  newPost: NewPost
-  setNewPost: (newPost: NewPost) => void
+  showEditDialog: boolean
+  setShowEditDialog: (showAddDialog: boolean) => void
 }
 
 export const usePostStore = create<PostStore>((set) => ({
@@ -36,12 +40,16 @@ export const usePostStore = create<PostStore>((set) => ({
   setSkip: (skip: number) => set({ skip }),
   searchQuery: "",
   setSearchQuery: (searchQuery: string) => set({ searchQuery }),
+  tags: [],
+  setTags: (tags: Tag[]) => set({ tags }),
   selectedTag: "",
   setSelectedTag: (selectedTag: string) => set({ selectedTag }),
+  selectedPost: null,
+  setSelectedPost: (selectedPost: Post | null) => set({ selectedPost }),
   showAddDialog: false,
   setShowAddDialog: (showAddDialog: boolean) => set({ showAddDialog }),
-  newPost: { title: "", body: "", userId: 1 },
-  setNewPost: (newPost: NewPost) => set({ newPost }),
+  showEditDialog: false,
+  setShowEditDialog: (showEditDialog: boolean) => set({ showEditDialog }),
 }))
 
 export const postStore = usePostStore

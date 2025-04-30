@@ -11,6 +11,8 @@ interface CommentStore {
   setShowAddCommentDialog: (showAddCommentDialog: boolean) => void
   showEditCommentDialog: boolean
   setShowEditCommentDialog: (showEditCommentDialog: boolean) => void
+  selectedComment: Comment | null
+  setSelectedComment: (selectedComment: Comment | null) => void
 }
 
 export const useCommentStore = create<CommentStore>((set) => ({
@@ -22,6 +24,8 @@ export const useCommentStore = create<CommentStore>((set) => ({
   setShowAddCommentDialog: (showAddCommentDialog: boolean) => set({ showAddCommentDialog }),
   showEditCommentDialog: false,
   setShowEditCommentDialog: (showEditCommentDialog: boolean) => set({ showEditCommentDialog }),
+  selectedComment: null,
+  setSelectedComment: (selectedComment: Comment | null) => set({ selectedComment }),
 }))
 
 export const commentStore = useCommentStore

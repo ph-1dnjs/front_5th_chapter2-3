@@ -4,26 +4,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { highlightText } from "../../shared/util"
 import CommentSection from "./CommentSection"
 
-import type { Post } from "../../shared/type/post"
-import type { Comment } from "../../shared/type/comment"
 import { usePostStore } from "../../entities/post/model/store"
 
 interface PostDetailProps {
   isShow: boolean
   setIsShow: Dispatch<SetStateAction<boolean>>
   postId: number
-  selectedPost: Post | null
-  setSelectedComment: Dispatch<SetStateAction<Comment | null>>
 }
 
-const PostDetailModal: React.FC<PostDetailProps> = ({
-  isShow,
-  setIsShow,
-  postId,
-  selectedPost,
-  setSelectedComment,
-}) => {
-  const { searchQuery } = usePostStore()
+const PostDetailModal: React.FC<PostDetailProps> = ({ isShow, setIsShow, postId }) => {
+  const { searchQuery, selectedPost } = usePostStore()
 
   return (
     <div>
@@ -34,7 +24,7 @@ const PostDetailModal: React.FC<PostDetailProps> = ({
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            <CommentSection postId={postId} setSelectedComment={setSelectedComment} />
+            <CommentSection postId={postId} />
           </div>
         </DialogContent>
       </Dialog>

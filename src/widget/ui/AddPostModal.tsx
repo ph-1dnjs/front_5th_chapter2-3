@@ -1,24 +1,23 @@
-import { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 
 import type { NewPost } from "../../shared/type/post"
+import { addPost } from "../../entities/post/action/addPost"
+import { usePostStore } from "../../entities/post/model/store"
 
-interface AddPostModalProps {
-  showAddDialog: boolean
-  setShowAddDialog: Dispatch<SetStateAction<boolean>>
-  newPost: NewPost
-  setNewPost: Dispatch<SetStateAction<NewPost>>
-  addPost: () => void
-}
+const initialPost: NewPost = { title: "", body: "", userId: 1 }
 
-const AddPostModal: React.FC<AddPostModalProps> = ({
-  showAddDialog,
-  setShowAddDialog,
-  newPost,
-  setNewPost,
-  addPost,
-}) => {
+const AddPostModal: React.FC = () => {
+  const { showAddDialog, setShowAddDialog } = usePostStore()
+
+  const [newPost, setNewPost] = useState(initialPost)
+
+  const handleAddPost = async () => {
+    await addPost(newPost)
+    setNewPost(initialPost)
+  }
+
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
       <DialogContent>
@@ -43,7 +42,7 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={addPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

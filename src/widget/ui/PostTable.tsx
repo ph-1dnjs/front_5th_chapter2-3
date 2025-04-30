@@ -3,31 +3,18 @@ import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react
 import { Post } from "../../shared/type/post"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from "../../shared/ui/"
 import { highlightText } from "../../shared/util"
+
 import { usePostStore } from "../../entities/post/model/store"
-import { User } from "../../shared/type/user"
+import { deletePost } from "../../entities/post/action/deletePost"
+import { openUserModal } from "../../entities/user/action/openUserModel"
 
 interface PostTableProps {
-  selectedTag: string | null
-  setSelectedTag: (tag: string) => void
   updateURL: () => void
-  openUserModal: (user: User) => Promise<void>
   openPostDetail: (post: Post) => void
-  setSelectedPost: (post: Post) => void
-  setShowEditDialog: (show: boolean) => void
-  deletePost: (postId: number) => void
 }
 
-const PostTable: React.FC<PostTableProps> = ({
-  selectedTag,
-  setSelectedTag,
-  updateURL,
-  openUserModal,
-  openPostDetail,
-  setSelectedPost,
-  setShowEditDialog,
-  deletePost,
-}) => {
-  const { posts, searchQuery } = usePostStore()
+const PostTable: React.FC<PostTableProps> = ({ updateURL, openPostDetail }) => {
+  const { posts, searchQuery, selectedTag, setSelectedTag, setSelectedPost, setShowEditDialog } = usePostStore()
 
   return (
     <Table>

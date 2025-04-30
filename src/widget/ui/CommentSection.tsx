@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react"
+import React from "react"
 import { Plus } from "lucide-react"
 
 import CommentItem from "./CommentItem"
@@ -8,10 +8,9 @@ import { useCommentStore } from "../../entities/comment/model/store"
 
 interface CommentSectionProps {
   postId: number
-  setSelectedComment: Dispatch<SetStateAction<Comment | null>>
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ postId, setSelectedComment }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
   const { comments, newComment, setNewComment, setShowAddCommentDialog } = useCommentStore()
 
   const filteredComments = comments[postId] || []
@@ -33,7 +32,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setSelectedComm
       </div>
       <div className="space-y-1">
         {filteredComments.map((comment: Comment) => (
-          <CommentItem key={comment.id} comment={comment} postId={postId} setSelectedComment={setSelectedComment} />
+          <CommentItem key={comment.id} comment={comment} postId={postId} />
         ))}
       </div>
     </div>

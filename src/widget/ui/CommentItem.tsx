@@ -1,22 +1,21 @@
-import React, { Dispatch, SetStateAction } from "react"
+import React from "react"
 import { ThumbsUp, Edit2, Trash2 } from "lucide-react"
 
 import { Button } from "../../shared/ui"
 import { highlightText } from "../../shared/util"
 import { Comment } from "../../shared/type/comment"
-import { deleteComment } from "../../entities/comment/actions/deleteComment"
+import { deleteComment } from "../../entities/comment/action/deleteComment"
 import { useCommentStore } from "../../entities/comment/model/store"
 import { usePostStore } from "../../entities/post/model/store"
-import { likeComment } from "../../entities/comment/actions/likeComment"
+import { likeComment } from "../../entities/comment/action/likeComment"
 
 interface CommentProps {
   comment: Comment
   postId: number
-  setSelectedComment: Dispatch<SetStateAction<Comment | null>>
 }
 
-const CommentItem: React.FC<CommentProps> = ({ comment, postId, setSelectedComment }) => {
-  const { setShowEditCommentDialog } = useCommentStore()
+const CommentItem: React.FC<CommentProps> = ({ comment, postId }) => {
+  const { setSelectedComment, setShowEditCommentDialog } = useCommentStore()
   const { searchQuery } = usePostStore()
 
   return (

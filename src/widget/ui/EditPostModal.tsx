@@ -4,23 +4,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { Input, Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
-import type { Post } from "../../shared/type/post"
+import { updatePost } from "../../entities/post/action/updatePost"
+import { usePostStore } from "../../entities/post/model/store"
 
-interface EditPostModalProps {
-  showEditDialog: boolean
-  setShowEditDialog: (show: boolean) => void
-  selectedPost: Post | null
-  setSelectedPost: React.Dispatch<React.SetStateAction<Post | null>>
-  updatePost: () => void
-}
+const EditPostModal: React.FC = ({}) => {
+  const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePostStore()
 
-const EditPostModal: React.FC<EditPostModalProps> = ({
-  showEditDialog,
-  setShowEditDialog,
-  selectedPost,
-  setSelectedPost,
-  updatePost,
-}) => {
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
       <DialogContent>
