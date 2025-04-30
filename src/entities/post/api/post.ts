@@ -1,3 +1,4 @@
+import { NewPost, Post } from "../../../shared/type/post"
 import { PostResponse } from "../model/type"
 
 export const getPosts = async (limit: number, skip: number): Promise<PostResponse> => {
@@ -28,5 +29,19 @@ export const fetchSearchPosts = async (searchQuery: string): Promise<PostRespons
   } catch (e) {
     console.error("게시물 검색 오류:", e)
     return { posts: [], total: 0 }
+  }
+}
+
+export const addPostApi = async (post: NewPost): Promise<Post | null> => {
+  try {
+    const response = await fetch("/api/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(post),
+    })
+    return response.json()
+  } catch (e) {
+    console.error("게시물 추가 오류:", e)
+    return null
   }
 }

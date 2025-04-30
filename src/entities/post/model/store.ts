@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-import { Post } from "../../../shared/type/post"
+import { NewPost, Post } from "../../../shared/type/post"
 
 interface PostStore {
   loading: boolean
@@ -17,6 +17,10 @@ interface PostStore {
   setSearchQuery: (searchQuery: string) => void
   selectedTag: string
   setSelectedTag: (selectedTag: string) => void
+  showAddDialog: boolean
+  setShowAddDialog: (showAddDialog: boolean) => void
+  newPost: NewPost
+  setNewPost: (newPost: NewPost) => void
 }
 
 export const usePostStore = create<PostStore>((set) => ({
@@ -34,6 +38,10 @@ export const usePostStore = create<PostStore>((set) => ({
   setSearchQuery: (searchQuery: string) => set({ searchQuery }),
   selectedTag: "",
   setSelectedTag: (selectedTag: string) => set({ selectedTag }),
+  showAddDialog: false,
+  setShowAddDialog: (showAddDialog: boolean) => set({ showAddDialog }),
+  newPost: { title: "", body: "", userId: 1 },
+  setNewPost: (newPost: NewPost) => set({ newPost }),
 }))
 
 export const postStore = usePostStore
