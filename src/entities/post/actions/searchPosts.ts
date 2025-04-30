@@ -1,6 +1,6 @@
 import { postStore } from "../model/store"
 import { useSearchPostQuery } from "../model/usePostQuery"
-import { fetchPosts } from "./fetchPost"
+import { fetchPosts } from "./fetchPosts"
 
 export const searchPosts = async () => {
   const { searchQuery, setPosts, setTotal, setLoading, limit, skip } = postStore.getState()

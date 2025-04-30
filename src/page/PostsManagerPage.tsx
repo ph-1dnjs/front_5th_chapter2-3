@@ -19,7 +19,7 @@ import PostTable from "../widget/ui/PostTable"
 import PostFilterControls from "../entities/post/ui/PostFilterControls"
 import { usePostStore } from "../entities/post/model/store"
 
-import { fetchPosts } from "../entities/post/actions/fetchPost"
+import { fetchPosts } from "../entities/post/actions/fetchPosts"
 import { User } from "../shared/type/user"
 
 const PostsManager = () => {
@@ -39,6 +39,8 @@ const PostsManager = () => {
     setLimit,
     searchQuery,
     setSearchQuery,
+    selectedTag,
+    setSelectedTag,
   } = usePostStore()
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
@@ -48,7 +50,6 @@ const PostsManager = () => {
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
   const [tags, setTags] = useState([])
-  const [selectedTag, setSelectedTag] = useState("")
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
@@ -79,36 +80,6 @@ const PostsManager = () => {
     } catch (error) {
       console.error("태그 가져오기 오류:", error)
     }
-  }
-
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag: string) => {
-    if (tag === selectedTag) return // 이미 선택된 태그면 다시 요청하지 않음
-    setSelectedTag(tag) // 상태 업데이트
-    if (!tag || tag === "all") {
-      fetchPosts() // 모든 게시물 불러오기
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch("/api/users?limit=0&select=username,image"),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
-
-      const postsWithUsers = postsData.posts.map((post: Post) => ({
-        ...post,
-        author: usersData.users.find((user: User) => user.id === post.userId),
-      }))
-
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error("태그별 게시물 가져오기 오류:", error)
-    }
-    setLoading(false)
   }
 
   // 게시물 추가
@@ -307,7 +278,6 @@ const PostsManager = () => {
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
             tags={tags}
-            fetchPostsByTag={fetchPostsByTag}
             updateURL={updateURL}
             sortBy={sortBy}
             setSortBy={setSortBy}

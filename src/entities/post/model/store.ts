@@ -15,6 +15,8 @@ interface PostStore {
   setSkip: (limit: number) => void
   searchQuery: string
   setSearchQuery: (searchQuery: string) => void
+  selectedTag: string
+  setSelectedTag: (selectedTag: string) => void
 }
 
 export const usePostStore = create<PostStore>((set) => ({
@@ -30,6 +32,8 @@ export const usePostStore = create<PostStore>((set) => ({
   setSkip: (skip: number) => set({ skip }),
   searchQuery: "",
   setSearchQuery: (searchQuery: string) => set({ searchQuery }),
+  selectedTag: "",
+  setSelectedTag: (selectedTag: string) => set({ selectedTag }),
 }))
 
 export const postStore = usePostStore

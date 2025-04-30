@@ -3,12 +3,12 @@ import { Search } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../../shared/ui"
 import { usePostStore } from "../model/store"
 import { searchPosts } from "../actions/searchPosts"
+import { fetchPostsByTag } from "../actions/fetchPostsByTag"
 
 interface PostFilterControlsProps {
   selectedTag: string
   setSelectedTag: (tag: string) => void
   tags: { url: string; slug: string }[]
-  fetchPostsByTag: (tag: string) => void
   updateURL: () => void
   sortBy: string
   setSortBy: (value: string) => void
@@ -20,7 +20,6 @@ const PostFilterControls: React.FC<PostFilterControlsProps> = ({
   selectedTag,
   setSelectedTag,
   tags,
-  fetchPostsByTag,
   updateURL,
   sortBy,
   setSortBy,
