@@ -86,7 +86,7 @@ const PostsManager = () => {
     if (tag === selectedTag) return // 이미 선택된 태그면 다시 요청하지 않음
     setSelectedTag(tag) // 상태 업데이트
     if (!tag || tag === "all") {
-      fetchPosts(limit, skip) // 모든 게시물 불러오기
+      fetchPosts() // 모든 게시물 불러오기
       return
     }
     setLoading(true)
@@ -98,9 +98,9 @@ const PostsManager = () => {
       const postsData = await postsResponse.json()
       const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
+      const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.users.find((user: User) => user.id === post.userId),
       }))
 
       setPosts(postsWithUsers)
@@ -131,7 +131,7 @@ const PostsManager = () => {
   // 게시물 업데이트
   const updatePost = async () => {
     try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
+      const response = await fetch(`/api/posts/${selectedPost?.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedPost),
@@ -191,10 +191,10 @@ const PostsManager = () => {
   // 댓글 업데이트
   const updateComment = async () => {
     try {
-      const response = await fetch(`/api/comments/${selectedComment.id}`, {
+      const response = await fetch(`/api/comments/${selectedComment?.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment.body }),
+        body: JSON.stringify({ body: selectedComment?.body }),
       })
       const data = await response.json()
       setComments((prev) => ({
@@ -222,17 +222,21 @@ const PostsManager = () => {
     }
   }
 
-  // 댓글 좋아요
   const likeComment = async (id: number, postId: number) => {
+    const postComments = comments[postId]
+    if (!postComments) return
+
+    const targetComment = postComments.find((c) => c.id === id)
+    if (!targetComment) return
+
     try {
       const response = await fetch(`/api/comments/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          likes: comments[postId].find((c) => c.id === id).likes + 1,
-        }),
+        body: JSON.stringify({ likes: targetComment.likes + 1 }),
       })
       const data = await response.json()
+
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) =>
@@ -271,7 +275,7 @@ const PostsManager = () => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
     } else {
-      fetchPosts(limit, skip)
+      fetchPosts()
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])

@@ -4,12 +4,13 @@ import { Post } from "../../shared/type/post"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from "../../shared/ui/"
 import { highlightText } from "../../shared/util"
 import { usePostStore } from "../../entities/post/model/store"
+import { User } from "../../shared/type/user"
 
 interface PostTableProps {
   selectedTag: string | null
   setSelectedTag: (tag: string) => void
   updateURL: () => void
-  openUserModal: (author: Post["author"]) => void
+  openUserModal: (user: User) => Promise<void>
   openPostDetail: (post: Post) => void
   setSelectedPost: (post: Post) => void
   setShowEditDialog: (show: boolean) => void
@@ -67,7 +68,7 @@ const PostTable: React.FC<PostTableProps> = ({
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author!)}>
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>

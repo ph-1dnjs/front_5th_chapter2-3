@@ -4,8 +4,8 @@ import { getUsers } from "../../user/api/user"
 import { getPosts } from "../api/post"
 import { postStore } from "../model/store"
 
-export const fetchPosts = async (limit: number, skip: number) => {
-  const { setLoading, setPosts, setTotal } = postStore.getState()
+export const fetchPosts = async () => {
+  const { setLoading, setPosts, setTotal, limit, skip } = postStore.getState()
 
   setLoading(true)
   try {

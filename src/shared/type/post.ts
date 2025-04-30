@@ -1,8 +1,10 @@
+import { User } from "./user"
+
 export interface Post {
   id: number
   title: string
   body: string
-  author?: Author
+  author?: User
   reactions: {
     likes: number
     dislikes: number
@@ -10,12 +12,6 @@ export interface Post {
   tags: string[]
   userId: number
   views: number
-}
-
-interface Author {
-  id: number
-  username: string
-  image: string
 }
 
 export interface NewPost {
