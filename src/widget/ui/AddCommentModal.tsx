@@ -1,24 +1,15 @@
 import React from "react"
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/ui"
 import { Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
-import { NewComment } from "../../shared/type/comment"
 
-interface AddCommentModalProps {
-  showAddCommentDialog: boolean
-  setShowAddCommentDialog: (show: boolean) => void
-  newComment: NewComment
-  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
-  addComment: () => void
-}
+import { useCommentStore } from "../../entities/comment/model/store"
+import { addComment } from "../../entities/comment/actions/addComment"
 
-const AddCommentModal: React.FC<AddCommentModalProps> = ({
-  showAddCommentDialog,
-  setShowAddCommentDialog,
-  newComment,
-  setNewComment,
-  addComment,
-}) => {
+const AddCommentModal: React.FC = () => {
+  const { newComment, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentStore()
+
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
       <DialogContent>

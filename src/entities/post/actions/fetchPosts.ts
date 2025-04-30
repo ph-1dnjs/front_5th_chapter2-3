@@ -8,6 +8,7 @@ export const fetchPosts = async () => {
   const { setLoading, setPosts, setTotal, limit, skip } = postStore.getState()
 
   setLoading(true)
+
   try {
     const [postsData, usersData] = await Promise.all([getPosts(limit, skip), getUsers()])
 

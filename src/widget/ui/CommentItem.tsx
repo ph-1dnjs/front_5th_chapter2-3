@@ -4,26 +4,21 @@ import { ThumbsUp, Edit2, Trash2 } from "lucide-react"
 import { Button } from "../../shared/ui"
 import { highlightText } from "../../shared/util"
 import { Comment } from "../../shared/type/comment"
+import { deleteComment } from "../../entities/comment/actions/deleteComment"
+import { useCommentStore } from "../../entities/comment/model/store"
+import { usePostStore } from "../../entities/post/model/store"
+import { likeComment } from "../../entities/comment/actions/likeComment"
 
 interface CommentProps {
   comment: Comment
   postId: number
-  likeComment: (commentId: number, postId: number) => void
-  deleteComment: (commentId: number, postId: number) => void
   setSelectedComment: Dispatch<SetStateAction<Comment | null>>
-  setShowEditCommentDialog: Dispatch<SetStateAction<boolean>>
-  searchQuery: string
 }
 
-const CommentItem: React.FC<CommentProps> = ({
-  comment,
-  postId,
-  likeComment,
-  deleteComment,
-  setSelectedComment,
-  setShowEditCommentDialog,
-  searchQuery,
-}) => {
+const CommentItem: React.FC<CommentProps> = ({ comment, postId, setSelectedComment }) => {
+  const { setShowEditCommentDialog } = useCommentStore()
+  const { searchQuery } = usePostStore()
+
   return (
     <div className="flex items-center justify-between text-sm border-b pb-1">
       <div className="flex items-center space-x-2 overflow-hidden">

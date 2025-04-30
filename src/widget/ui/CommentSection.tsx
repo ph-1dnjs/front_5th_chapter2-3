@@ -3,31 +3,17 @@ import { Plus } from "lucide-react"
 
 import CommentItem from "./CommentItem"
 import { Button } from "../../shared/ui"
-import { Comment, NewComment } from "../../shared/type/comment"
+import { Comment } from "../../shared/type/comment"
+import { useCommentStore } from "../../entities/comment/model/store"
 
 interface CommentSectionProps {
   postId: number
-  comments: Record<number, Comment[]>
-  setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
-  setShowAddCommentDialog: (show: boolean) => void
-  likeComment: (commentId: number, postId: number) => void
-  deleteComment: (commentId: number, postId: number) => void
   setSelectedComment: Dispatch<SetStateAction<Comment | null>>
-  setShowEditCommentDialog: Dispatch<SetStateAction<boolean>>
-  searchQuery: string
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({
-  postId,
-  comments,
-  setNewComment,
-  setShowAddCommentDialog,
-  likeComment,
-  deleteComment,
-  setSelectedComment,
-  setShowEditCommentDialog,
-  searchQuery,
-}) => {
+const CommentSection: React.FC<CommentSectionProps> = ({ postId, setSelectedComment }) => {
+  const { comments, newComment, setNewComment, setShowAddCommentDialog } = useCommentStore()
+
   const filteredComments = comments[postId] || []
 
   return (
@@ -37,7 +23,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         <Button
           size="sm"
           onClick={() => {
-            setNewComment((prev) => ({ ...prev, postId: postId }))
+            setNewComment({ ...newComment, postId: postId })
             setShowAddCommentDialog(true)
           }}
         >
@@ -47,16 +33,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       </div>
       <div className="space-y-1">
         {filteredComments.map((comment: Comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            postId={postId}
-            likeComment={likeComment}
-            deleteComment={deleteComment}
-            setSelectedComment={setSelectedComment}
-            setShowEditCommentDialog={setShowEditCommentDialog}
-            searchQuery={searchQuery}
-          />
+          <CommentItem key={comment.id} comment={comment} postId={postId} setSelectedComment={setSelectedComment} />
         ))}
       </div>
     </div>

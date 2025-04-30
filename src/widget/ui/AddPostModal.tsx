@@ -12,7 +12,13 @@ interface AddPostModalProps {
   addPost: () => void
 }
 
-const AddPostModal = ({ showAddDialog, setShowAddDialog, newPost, setNewPost, addPost }: AddPostModalProps) => {
+const AddPostModal: React.FC<AddPostModalProps> = ({
+  showAddDialog,
+  setShowAddDialog,
+  newPost,
+  setNewPost,
+  addPost,
+}) => {
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
       <DialogContent>
