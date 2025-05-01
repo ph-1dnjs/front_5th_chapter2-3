@@ -1,18 +1,23 @@
+import { useEffect, useState } from "react"
 import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react"
 
-import { Post } from "../../shared/type/post"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from "../../shared/ui/"
 import { highlightText } from "../../shared/util"
+import type { User } from "../../shared/type/user"
+import type { Post } from "../../shared/type/post"
 
 import { usePostStore } from "../../entities/post/model/store"
-import { openUserModal } from "../../entities/user/action/openUserModel"
 import { useDeletePost } from "../../entities/post/model/usePostMutations"
+import { useUserDetail } from "../../entities/user/model/useUserQuery"
+import { useUserStore } from "../../entities/user/model/store"
 
 interface PostTableProps {
   updateURL: () => void
 }
 
 const PostTable: React.FC<PostTableProps> = ({ updateURL }) => {
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
+
   const {
     posts,
     searchQuery,
@@ -22,13 +27,26 @@ const PostTable: React.FC<PostTableProps> = ({ updateURL }) => {
     setShowEditDialog,
     setShowPostDetailDialog,
   } = usePostStore()
+  const { setSelectedUser, setShowUserModal } = useUserStore()
 
+  const { data: userData } = useUserDetail(selectedUserId)
   const { mutate: deletePost } = useDeletePost()
 
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     setShowPostDetailDialog(true)
   }
+
+  const openUserModal = (user: User) => {
+    setSelectedUserId(user.id)
+  }
+
+  useEffect(() => {
+    if (userData) {
+      setSelectedUser(userData)
+      setShowUserModal(true)
+    }
+  }, [userData])
 
   return (
     <Table>

@@ -1,12 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUsers } from "../api/user"
+import { STALE_TIME } from "../../../shared/config/cache"
+import { getUserById } from "../api/user"
 
-export const QUERY_KEY = { useGetUsers: "api/users" }
+export const QUERY_KEY = "user"
 
-export const useGetUsers = () => {
+export const useUserDetail = (userId: number | null) => {
   return useQuery({
-    queryKey: [QUERY_KEY.useGetUsers],
-    queryFn: () => getUsers(),
-    initialData: { users: [], total: 0 },
+    queryKey: [QUERY_KEY, userId],
+    queryFn: () => {
+      if (userId !== null) return getUserById(userId)
+    },
+    enabled: userId !== null,
+    staleTime: STALE_TIME,
   })
 }
