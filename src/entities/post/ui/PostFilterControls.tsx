@@ -2,7 +2,6 @@ import { Search } from "lucide-react"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../../shared/ui"
 import { usePostStore } from "../model/store"
-import { searchPosts } from "../action/searchPosts"
 
 interface PostFilterControlsProps {
   updateURL: () => void
@@ -22,11 +21,6 @@ const PostFilterControls: React.FC<PostFilterControlsProps> = ({ updateURL }) =>
             className="pl-8"
             value={searchQuery}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") {
-                searchPosts()
-              }
-            }}
           />
         </div>
       </div>

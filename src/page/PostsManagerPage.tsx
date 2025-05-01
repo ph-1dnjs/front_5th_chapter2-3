@@ -15,8 +15,8 @@ import PostTable from "../widget/ui/PostTable"
 
 import PostFilterControls from "../entities/post/ui/PostFilterControls"
 import { usePostStore } from "../entities/post/model/store"
-import { fetchTags } from "../entities/post/action/fetchTags"
-import { useGetPosts, useGetPostsByTag } from "../entities/post/model/usePostQueries"
+import { useGetPosts, useGetPostsByTag, useGetTags, useSearchPosts } from "../entities/post/model/usePostQueries"
+import { useDebounce } from "../shared/hook/useDebounce"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -28,6 +28,7 @@ const PostsManager = () => {
     setLoading,
     setPosts,
     setTotal,
+    setTags,
     skip,
     setSkip,
     limit,
@@ -43,8 +44,12 @@ const PostsManager = () => {
     setShowAddDialog,
   } = usePostStore()
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
+
   const { data: postsData, isLoading: postsLoading } = useGetPosts()
   const { data: postsByTagData, isLoading: postsByTagLoading } = useGetPostsByTag(selectedTag)
+  const { data: searchPosts, isLoading: searchPostsLoading } = useSearchPosts(debouncedSearchQuery)
+  const { data: tagsData } = useGetTags()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -57,10 +62,6 @@ const PostsManager = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
-
-  useEffect(() => {
-    fetchTags()
-  }, [])
 
   useEffect(() => {
     updateURL()
@@ -78,22 +79,40 @@ const PostsManager = () => {
 
   // 데이터 로딩 핸들러
   useEffect(() => {
-    setLoading(postsLoading || postsByTagLoading)
-  }, [postsLoading, postsByTagLoading])
+    setLoading(postsLoading || postsByTagLoading || searchPostsLoading)
+  }, [postsLoading, postsByTagLoading, searchPostsLoading])
+
+  // 태그 데이터 업데이트
+  useEffect(() => {
+    if (tagsData) {
+      setTags(tagsData)
+    }
+  }, [tagsData])
 
   // 포스트 데이터 업데이트
   useEffect(() => {
     if (postsData) {
       setPosts(postsData.posts)
       setTotal(postsData.total)
+      setLoading(false)
     }
   }, [postsData])
+
+  // 검색 포스트 데이터 업데이트
+  useEffect(() => {
+    if (searchPosts) {
+      setPosts(searchPosts.posts)
+      setTotal(searchPosts.total)
+      setLoading(false)
+    }
+  }, [searchPosts])
 
   // 태그 선택 포스트 데이터 업데이트
   useEffect(() => {
     if (postsByTagData) {
       setPosts(postsByTagData.posts)
       setTotal(postsByTagData.total)
+      setLoading(false)
     }
   }, [postsByTagData])
 

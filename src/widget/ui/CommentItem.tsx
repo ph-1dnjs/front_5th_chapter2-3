@@ -17,8 +17,8 @@ const CommentItem: React.FC<CommentProps> = ({ comment, postId }) => {
   const { setSelectedComment, setShowEditCommentDialog } = useCommentStore()
   const { searchQuery } = usePostStore()
 
-  const likeCommentMutation = useLikeComment()
-  const deleteCommentMutation = useDeleteComment()
+  const { mutate: likeComment } = useLikeComment()
+  const { mutate: deleteComment } = useDeleteComment()
 
   return (
     <div className="flex items-center justify-between text-sm border-b pb-1">
@@ -27,7 +27,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment, postId }) => {
         <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
       </div>
       <div className="flex items-center space-x-1">
-        <Button variant="ghost" size="sm" onClick={() => likeCommentMutation.mutate({ id: comment.id, postId })}>
+        <Button variant="ghost" size="sm" onClick={() => likeComment({ id: comment.id, postId })}>
           <ThumbsUp className="w-3 h-3" />
           <span className="ml-1 text-xs">{comment.likes}</span>
         </Button>
@@ -41,7 +41,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment, postId }) => {
         >
           <Edit2 className="w-3 h-3" />
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => deleteCommentMutation.mutate({ id: comment.id, postId })}>
+        <Button variant="ghost" size="sm" onClick={() => deleteComment({ id: comment.id, postId })}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>
