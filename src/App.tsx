@@ -5,8 +5,8 @@ import { queryClient } from "./shared/lib/queryClient.ts"
 
 import PostsManagerPage from "./page/PostsManagerPage.tsx"
 
-import Header from "./widget/ui/Header.tsx"
-import Footer from "./widget/ui/Footer.tsx"
+import Header from "./widgets/ui/Header.tsx"
+import Footer from "./widgets/ui/Footer.tsx"
 
 const App = () => {
   return (
