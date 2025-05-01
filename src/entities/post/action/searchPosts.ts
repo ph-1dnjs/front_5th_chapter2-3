@@ -3,10 +3,10 @@ import { useSearchPostQuery } from "../model/usePostQuery"
 import { fetchPosts } from "./fetchPosts"
 
 export const searchPosts = async () => {
-  const { searchQuery, setPosts, setTotal, setLoading, limit, skip } = postStore.getState()
+  const { searchQuery, setPosts, setTotal, setLoading } = postStore.getState()
 
   if (!searchQuery) {
-    fetchPosts(limit, skip)
+    fetchPosts()
     return
   }
 

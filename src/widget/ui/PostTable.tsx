@@ -7,14 +7,28 @@ import { highlightText } from "../../shared/util"
 import { usePostStore } from "../../entities/post/model/store"
 import { deletePost } from "../../entities/post/action/deletePost"
 import { openUserModal } from "../../entities/user/action/openUserModel"
+import { fetchComments } from "../../entities/comment/action/fetchComments"
 
 interface PostTableProps {
   updateURL: () => void
-  openPostDetail: (post: Post) => void
 }
 
-const PostTable: React.FC<PostTableProps> = ({ updateURL, openPostDetail }) => {
-  const { posts, searchQuery, selectedTag, setSelectedTag, setSelectedPost, setShowEditDialog } = usePostStore()
+const PostTable: React.FC<PostTableProps> = ({ updateURL }) => {
+  const {
+    posts,
+    searchQuery,
+    selectedTag,
+    setSelectedTag,
+    setSelectedPost,
+    setShowEditDialog,
+    setShowPostDetailDialog,
+  } = usePostStore()
+
+  const openPostDetail = (post: Post) => {
+    setSelectedPost(post)
+    fetchComments(post.id)
+    setShowPostDetailDialog(true)
+  }
 
   return (
     <Table>

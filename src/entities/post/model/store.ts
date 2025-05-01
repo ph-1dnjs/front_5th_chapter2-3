@@ -13,6 +13,10 @@ interface PostStore {
   setLimit: (limit: number) => void
   skip: number
   setSkip: (limit: number) => void
+  sortBy: string
+  setSortBy: (sortBy: string) => void
+  sortOrder: string
+  setSortOrder: (sortOrder: string) => void
   searchQuery: string
   setSearchQuery: (searchQuery: string) => void
   tags: Tag[]
@@ -25,6 +29,8 @@ interface PostStore {
   setShowAddDialog: (showAddDialog: boolean) => void
   showEditDialog: boolean
   setShowEditDialog: (showAddDialog: boolean) => void
+  showPostDetailDialog: boolean
+  setShowPostDetailDialog: (setShowPostDetailDialog: boolean) => void
 }
 
 export const usePostStore = create<PostStore>((set) => ({
@@ -38,6 +44,10 @@ export const usePostStore = create<PostStore>((set) => ({
   setLimit: (limit: number) => set({ limit }),
   skip: 0,
   setSkip: (skip: number) => set({ skip }),
+  sortBy: "",
+  setSortBy: (sortBy: string) => set({ sortBy }),
+  sortOrder: "asc",
+  setSortOrder: (sortOrder: string) => set({ sortOrder }),
   searchQuery: "",
   setSearchQuery: (searchQuery: string) => set({ searchQuery }),
   tags: [],
@@ -50,6 +60,8 @@ export const usePostStore = create<PostStore>((set) => ({
   setShowAddDialog: (showAddDialog: boolean) => set({ showAddDialog }),
   showEditDialog: false,
   setShowEditDialog: (showEditDialog: boolean) => set({ showEditDialog }),
+  showPostDetailDialog: false,
+  setShowPostDetailDialog: (showPostDetailDialog: boolean) => set({ showPostDetailDialog }),
 }))
 
 export const postStore = usePostStore

@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Plus } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
-
-import type { Post } from "../shared/type/post"
 
 import UserModal from "../widget/ui/UserModal"
 import EditCommentModal from "../widget/ui/EditCommentModal"
@@ -20,7 +18,6 @@ import { usePostStore } from "../entities/post/model/store"
 
 import { fetchPosts } from "../entities/post/action/fetchPosts"
 import { fetchPostsByTag } from "../entities/post/action/fetchPostsByTag"
-import { fetchComments } from "../entities/comment/action/fetchComments"
 import { fetchTags } from "../entities/post/action/fetchTags"
 
 const PostsManager = () => {
@@ -34,18 +31,16 @@ const PostsManager = () => {
     setSkip,
     limit,
     setLimit,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
     searchQuery,
     setSearchQuery,
     selectedTag,
     setSelectedTag,
     setShowAddDialog,
-    selectedPost,
-    setSelectedPost,
   } = usePostStore()
-
-  const [sortBy, setSortBy] = useState("sortBy")
-  const [sortOrder, setSortOrder] = useState("asc")
-  const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -57,13 +52,6 @@ const PostsManager = () => {
     if (sortOrder) params.set("sortOrder", sortOrder)
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
-  }
-
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
   }
 
   useEffect(() => {
@@ -109,31 +97,15 @@ const PostsManager = () => {
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
           />
-
-          {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
-          ) : (
-            <PostTable updateURL={updateURL} openPostDetail={openPostDetail} />
-          )}
-
+          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable updateURL={updateURL} />}
           <Pagination />
         </div>
       </CardContent>
-
       <AddPostModal />
-
       <EditPostModal />
-
       <AddCommentModal />
-
       <EditCommentModal />
-
-      <PostDetailModal
-        isShow={showPostDetailDialog}
-        setIsShow={setShowPostDetailDialog}
-        postId={selectedPost?.id ?? 0}
-      />
-
+      <PostDetailModal />
       <UserModal />
     </Card>
   )
