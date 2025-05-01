@@ -1,14 +1,13 @@
 import { fetchSearchPosts } from "../api/post"
 import { postStore } from "../model/store"
-import { fetchPosts } from "./fetchPosts"
 
 export const searchPosts = async () => {
   const { searchQuery, setPosts, setTotal, setLoading } = postStore.getState()
 
-  if (!searchQuery) {
-    fetchPosts()
-    return
-  }
+  // if (!searchQuery) {
+  //   fetchPosts()
+  //   return
+  // }
 
   setLoading(true)
 

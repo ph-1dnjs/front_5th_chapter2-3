@@ -8,8 +8,6 @@ import { invalidateQueries } from "../../../shared/lib/queryInvalidate"
 import { addCommentApi, deleteCommentApi, likeCommentApi, updateCommentApi } from "../api/comment"
 import { commentStore } from "../model/store"
 
-import { QUERY_KEY } from "./useCommentQueries"
-
 interface CommentParams {
   id: number
   postId: number

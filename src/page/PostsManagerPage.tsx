@@ -15,10 +15,8 @@ import PostTable from "../widget/ui/PostTable"
 
 import PostFilterControls from "../entities/post/ui/PostFilterControls"
 import { usePostStore } from "../entities/post/model/store"
-
-import { fetchPosts } from "../entities/post/action/fetchPosts"
-import { fetchPostsByTag } from "../entities/post/action/fetchPostsByTag"
 import { fetchTags } from "../entities/post/action/fetchTags"
+import { useGetPosts, useGetPostsByTag } from "../entities/post/model/usePostQueries"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -27,6 +25,9 @@ const PostsManager = () => {
   // 상태 관리
   const {
     loading,
+    setLoading,
+    setPosts,
+    setTotal,
     skip,
     setSkip,
     limit,
@@ -41,6 +42,9 @@ const PostsManager = () => {
     setSelectedTag,
     setShowAddDialog,
   } = usePostStore()
+
+  const { data: postsData, isLoading: postsLoading } = useGetPosts()
+  const { data: postsByTagData, isLoading: postsByTagLoading } = useGetPostsByTag(selectedTag)
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -59,11 +63,6 @@ const PostsManager = () => {
   }, [])
 
   useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
@@ -76,6 +75,27 @@ const PostsManager = () => {
     setSortOrder(params.get("sortOrder") || "asc")
     setSelectedTag(params.get("tag") || "")
   }, [location.search])
+
+  // 데이터 로딩 핸들러
+  useEffect(() => {
+    setLoading(postsLoading || postsByTagLoading)
+  }, [postsLoading, postsByTagLoading])
+
+  // 포스트 데이터 업데이트
+  useEffect(() => {
+    if (postsData) {
+      setPosts(postsData.posts)
+      setTotal(postsData.total)
+    }
+  }, [postsData])
+
+  // 태그 선택 포스트 데이터 업데이트
+  useEffect(() => {
+    if (postsByTagData) {
+      setPosts(postsByTagData.posts)
+      setTotal(postsByTagData.total)
+    }
+  }, [postsByTagData])
 
   return (
     <Card className="w-full max-w-6xl mx-auto">

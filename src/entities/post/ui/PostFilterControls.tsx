@@ -3,7 +3,6 @@ import { Search } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Input } from "../../../shared/ui"
 import { usePostStore } from "../model/store"
 import { searchPosts } from "../action/searchPosts"
-import { fetchPostsByTag } from "../action/fetchPostsByTag"
 
 interface PostFilterControlsProps {
   updateURL: () => void
@@ -36,7 +35,6 @@ const PostFilterControls: React.FC<PostFilterControlsProps> = ({ updateURL }) =>
         value={selectedTag}
         onValueChange={(value) => {
           setSelectedTag(value)
-          fetchPostsByTag(value)
           updateURL()
         }}
       >
