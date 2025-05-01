@@ -1,13 +1,16 @@
+import * as React from "react"
+import { MemoryRouter } from "react-router-dom"
+
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { http, HttpResponse } from "msw"
 import { setupServer } from "msw/node"
-import { MemoryRouter } from "react-router-dom"
-import PostsManager from "../src/page/PostsManagerPage"
-import * as React from "react"
 import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+import PostsManager from "../src/page/PostsManagerPage"
 
 // MSW 서버 설정
 const server = setupServer(
@@ -45,10 +48,13 @@ afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
+  const queryClient = new QueryClient()
   return render(
-    <MemoryRouter>
-      <PostsManager />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <PostsManager />
+      </MemoryRouter>
+    </QueryClientProvider>,
   )
 }
 
