@@ -3,8 +3,8 @@ import { useState } from "react"
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input, Textarea } from "../../shared/ui"
 
 import type { NewPost } from "../../shared/type/post"
-import { addPost } from "../../entities/post/action/addPost"
 import { usePostStore } from "../../entities/post/model/store"
+import { useAddPost } from "../../entities/post/model/usePostMutations"
 
 const initialPost: NewPost = { title: "", body: "", userId: 1 }
 
@@ -12,6 +12,8 @@ const AddPostModal: React.FC = () => {
   const { showAddDialog, setShowAddDialog } = usePostStore()
 
   const [newPost, setNewPost] = useState(initialPost)
+
+  const { mutate: addPost } = useAddPost()
 
   const handleAddPost = async () => {
     await addPost(newPost)

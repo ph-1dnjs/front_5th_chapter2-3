@@ -5,8 +5,8 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button }
 import { highlightText } from "../../shared/util"
 
 import { usePostStore } from "../../entities/post/model/store"
-import { deletePost } from "../../entities/post/action/deletePost"
 import { openUserModal } from "../../entities/user/action/openUserModel"
+import { useDeletePost } from "../../entities/post/model/usePostMutations"
 
 interface PostTableProps {
   updateURL: () => void
@@ -22,6 +22,8 @@ const PostTable: React.FC<PostTableProps> = ({ updateURL }) => {
     setShowEditDialog,
     setShowPostDetailDialog,
   } = usePostStore()
+
+  const { mutate: deletePost } = useDeletePost()
 
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)

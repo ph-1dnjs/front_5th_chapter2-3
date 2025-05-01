@@ -14,13 +14,11 @@ export const QUERY_KEY = {
 }
 
 export const useGetPosts = () => {
-  const { limit, skip, setLoading } = postStore.getState()
+  const { limit, skip } = postStore.getState()
 
   return useQuery({
     queryKey: [QUERY_KEY.getPosts],
     queryFn: async () => {
-      setLoading(true)
-
       const [postsData, usersData] = await Promise.all([getPosts(limit, skip), getUsers()])
 
       const postsWithUsers = postsData.posts.map((post: Post) => ({
@@ -38,13 +36,11 @@ export const useGetPosts = () => {
 }
 
 export const useGetPostsByTag = (tag: string) => {
-  const { selectedTag, setLoading } = postStore.getState()
+  const { selectedTag } = postStore.getState()
 
   return useQuery({
     queryKey: [QUERY_KEY.getPostsByTag, tag],
     queryFn: async () => {
-      setLoading(true)
-
       const [postsData, usersData] = await Promise.all([getPostsByTag(tag), getUsers()])
 
       const postsWithUsers = postsData.posts.map((post: Post) => ({
@@ -63,15 +59,9 @@ export const useGetPostsByTag = (tag: string) => {
 }
 
 export const useSearchPosts = (searchQuery: string) => {
-  const { setLoading } = postStore()
-
   return useQuery({
     queryKey: [QUERY_KEY.searchPost, searchQuery],
-    queryFn: async () => {
-      setLoading(true)
-      const data = await fetchSearchPosts(searchQuery)
-      return data
-    },
+    queryFn: () => fetchSearchPosts(searchQuery),
     enabled: !!searchQuery,
     staleTime: STALE_TIME,
   })

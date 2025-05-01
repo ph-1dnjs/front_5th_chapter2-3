@@ -3,6 +3,7 @@ import { Plus } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { Button, Card, CardContent, CardHeader, CardTitle } from "../shared/ui"
+import { useDebounce } from "../shared/hook/useDebounce"
 
 import UserModal from "../widget/ui/UserModal"
 import EditCommentModal from "../widget/ui/EditCommentModal"
@@ -16,7 +17,6 @@ import PostTable from "../widget/ui/PostTable"
 import PostFilterControls from "../entities/post/ui/PostFilterControls"
 import { usePostStore } from "../entities/post/model/store"
 import { useGetPosts, useGetPostsByTag, useGetTags, useSearchPosts } from "../entities/post/model/usePostQueries"
-import { useDebounce } from "../shared/hook/useDebounce"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -44,7 +44,7 @@ const PostsManager = () => {
     setShowAddDialog,
   } = usePostStore()
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 300)
+  const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   const { data: postsData, isLoading: postsLoading } = useGetPosts()
   const { data: postsByTagData, isLoading: postsByTagLoading } = useGetPostsByTag(selectedTag)
@@ -94,7 +94,6 @@ const PostsManager = () => {
     if (postsData) {
       setPosts(postsData.posts)
       setTotal(postsData.total)
-      setLoading(false)
     }
   }, [postsData])
 
@@ -103,7 +102,6 @@ const PostsManager = () => {
     if (searchPosts) {
       setPosts(searchPosts.posts)
       setTotal(searchPosts.total)
-      setLoading(false)
     }
   }, [searchPosts])
 
@@ -112,7 +110,6 @@ const PostsManager = () => {
     if (postsByTagData) {
       setPosts(postsByTagData.posts)
       setTotal(postsByTagData.total)
-      setLoading(false)
     }
   }, [postsByTagData])
 

@@ -4,11 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { Input, Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
-import { updatePost } from "../../entities/post/action/updatePost"
 import { usePostStore } from "../../entities/post/model/store"
+import { useUpdatePost } from "../../entities/post/model/usePostMutations"
 
 const EditPostModal: React.FC = ({}) => {
   const { selectedPost, setSelectedPost, showEditDialog, setShowEditDialog } = usePostStore()
+
+  const { mutate: updatePost } = useUpdatePost()
 
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
@@ -42,7 +44,7 @@ const EditPostModal: React.FC = ({}) => {
               }
             }}
           />
-          <Button onClick={updatePost}>게시물 업데이트</Button>
+          <Button onClick={() => updatePost()}>게시물 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>
