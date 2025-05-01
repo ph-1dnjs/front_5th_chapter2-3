@@ -5,9 +5,15 @@ import Header from "./widget/ui/Header.tsx"
 import Footer from "./widget/ui/Footer.tsx"
 import PostsManagerPage from "./page/PostsManagerPage.tsx"
 
-const queryClient = new QueryClient()
-
 const App = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  })
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
