@@ -5,10 +5,12 @@ import { Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
 import { useCommentStore } from "../../entities/comment/model/store"
-import { addComment } from "../../entities/comment/action/addComment"
+import { useAddComment } from "../../entities/comment/model/useCommentMutations"
 
 const AddCommentModal: React.FC = () => {
   const { newComment, setNewComment, showAddCommentDialog, setShowAddCommentDialog } = useCommentStore()
+
+  const { mutate: addComment } = useAddComment()
 
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
@@ -22,7 +24,7 @@ const AddCommentModal: React.FC = () => {
             value={newComment.body}
             onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
           />
-          <Button onClick={addComment}>댓글 추가</Button>
+          <Button onClick={() => addComment()}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

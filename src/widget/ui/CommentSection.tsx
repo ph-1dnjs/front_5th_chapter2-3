@@ -8,10 +8,11 @@ import { useCommentStore } from "../../entities/comment/model/store"
 
 interface CommentSectionProps {
   postId: number
+  comments: Record<string, Comment[]>
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
-  const { comments, newComment, setNewComment, setShowAddCommentDialog } = useCommentStore()
+const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments }) => {
+  const { newComment, setNewComment, setShowAddCommentDialog } = useCommentStore()
 
   const filteredComments = comments[postId] || []
 

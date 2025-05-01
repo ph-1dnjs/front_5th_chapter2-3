@@ -4,11 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../shared/u
 import { Textarea } from "../../shared/ui"
 import { Button } from "../../shared/ui"
 
-import { updateComment } from "../../entities/comment/action/updateComment"
 import { useCommentStore } from "../../entities/comment/model/store"
+import { useUpdateComment } from "../../entities/comment/model/useCommentMutations"
 
 const EditCommentModal: React.FC = () => {
   const { selectedComment, setSelectedComment, showEditCommentDialog, setShowEditCommentDialog } = useCommentStore()
+
+  const { mutate: updateComment } = useUpdateComment()
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>

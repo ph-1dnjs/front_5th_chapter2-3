@@ -1,19 +1,14 @@
 import { BrowserRouter as Router } from "react-router-dom"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
+
+import { queryClient } from "./shared/lib/queryClient.ts"
+
+import PostsManagerPage from "./page/PostsManagerPage.tsx"
 
 import Header from "./widget/ui/Header.tsx"
 import Footer from "./widget/ui/Footer.tsx"
-import PostsManagerPage from "./page/PostsManagerPage.tsx"
 
 const App = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 60 * 1000,
-      },
-    },
-  })
-
   return (
     <QueryClientProvider client={queryClient}>
       <Router>

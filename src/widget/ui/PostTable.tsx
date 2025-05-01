@@ -7,7 +7,6 @@ import { highlightText } from "../../shared/util"
 import { usePostStore } from "../../entities/post/model/store"
 import { deletePost } from "../../entities/post/action/deletePost"
 import { openUserModal } from "../../entities/user/action/openUserModel"
-import { fetchComments } from "../../entities/comment/action/fetchComments"
 
 interface PostTableProps {
   updateURL: () => void
@@ -26,7 +25,6 @@ const PostTable: React.FC<PostTableProps> = ({ updateURL }) => {
 
   const openPostDetail = (post: Post) => {
     setSelectedPost(post)
-    fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
 
