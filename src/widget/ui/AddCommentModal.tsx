@@ -14,7 +14,7 @@ const AddCommentModal: React.FC = () => {
 
   return (
     <Dialog open={showAddCommentDialog} onOpenChange={setShowAddCommentDialog}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>새 댓글 추가</DialogTitle>
         </DialogHeader>

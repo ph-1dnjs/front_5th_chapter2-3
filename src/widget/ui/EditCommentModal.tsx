@@ -14,7 +14,7 @@ const EditCommentModal: React.FC = () => {
 
   return (
     <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>댓글 수정</DialogTitle>
         </DialogHeader>

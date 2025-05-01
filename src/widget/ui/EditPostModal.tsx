@@ -14,7 +14,7 @@ const EditPostModal: React.FC = ({}) => {
 
   return (
     <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>게시물 수정</DialogTitle>
         </DialogHeader>

@@ -22,7 +22,7 @@ const AddPostModal: React.FC = () => {
 
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>새 게시물 추가</DialogTitle>
         </DialogHeader>

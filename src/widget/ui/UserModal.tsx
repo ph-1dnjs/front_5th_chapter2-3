@@ -8,7 +8,7 @@ const UserModal: React.FC = () => {
 
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader className="header">
           <DialogTitle>사용자 정보</DialogTitle>
         </DialogHeader>

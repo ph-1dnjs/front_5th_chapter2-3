@@ -24,7 +24,7 @@ const PostDetailModal: React.FC = () => {
   return (
     <div>
       <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent aria-describedby={undefined} className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
           </DialogHeader>
