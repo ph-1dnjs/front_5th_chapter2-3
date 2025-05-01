@@ -7,20 +7,11 @@ import { fetchPostsByTag } from "../action/fetchPostsByTag"
 
 interface PostFilterControlsProps {
   updateURL: () => void
-  sortBy: string
-  setSortBy: (value: string) => void
-  sortOrder: string
-  setSortOrder: (value: string) => void
 }
 
-const PostFilterControls: React.FC<PostFilterControlsProps> = ({
-  updateURL,
-  sortBy,
-  setSortBy,
-  sortOrder,
-  setSortOrder,
-}) => {
-  const { selectedTag, setSelectedTag, tags, searchQuery, setSearchQuery } = usePostStore()
+const PostFilterControls: React.FC<PostFilterControlsProps> = ({ updateURL }) => {
+  const { selectedTag, setSelectedTag, tags, searchQuery, setSearchQuery, sortBy, setSortBy, sortOrder, setSortOrder } =
+    usePostStore()
 
   return (
     <div className="flex gap-4">

@@ -44,7 +44,7 @@ export const usePostStore = create<PostStore>((set) => ({
   setLimit: (limit: number) => set({ limit }),
   skip: 0,
   setSkip: (skip: number) => set({ skip }),
-  sortBy: "",
+  sortBy: "sortBy",
   setSortBy: (sortBy: string) => set({ sortBy }),
   sortOrder: "asc",
   setSortOrder: (sortOrder: string) => set({ sortOrder }),

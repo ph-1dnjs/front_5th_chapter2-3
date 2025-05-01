@@ -1,5 +1,5 @@
+import { fetchSearchPosts } from "../api/post"
 import { postStore } from "../model/store"
-import { useSearchPostQuery } from "../model/usePostQuery"
 import { fetchPosts } from "./fetchPosts"
 
 export const searchPosts = async () => {
@@ -12,15 +12,12 @@ export const searchPosts = async () => {
 
   setLoading(true)
 
-  try {
-    const { data } = await useSearchPostQuery(searchQuery)
-    if (data) {
-      setPosts(data.posts)
-      setTotal(data.total)
-    }
-  } catch (e) {
-    console.error("게시물 검색 오류:", e)
-  } finally {
-    setLoading(false)
+  const data = await fetchSearchPosts(searchQuery)
+
+  if (data) {
+    setPosts(data.posts)
+    setTotal(data.total)
   }
+
+  setLoading(false)
 }

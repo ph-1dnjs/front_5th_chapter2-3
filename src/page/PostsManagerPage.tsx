@@ -90,13 +90,7 @@ const PostsManager = () => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          <PostFilterControls
-            updateURL={updateURL}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-          />
+          <PostFilterControls updateURL={updateURL} />
           {loading ? <div className="flex justify-center p-4">로딩 중...</div> : <PostTable updateURL={updateURL} />}
           <Pagination />
         </div>
